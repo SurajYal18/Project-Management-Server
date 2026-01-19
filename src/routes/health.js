@@ -1,7 +1,3 @@
-/**
- * Health Check Route
- * Check server status
- */
 const express = require('express');
 const router = express.Router();
 const successResponse = require('../utils/successResponse');

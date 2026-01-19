@@ -1,20 +1,29 @@
-/**
- * Standard Success Response function to send formatted JSON data
- */
+// Import logger utility
 const logger = require('./logger');
 
-const successResponse = (res, message = 'Success', data = {}, statusCode = 200) => {
-    try {
-        logger.info(`Sending success response: ${message}`);
-        return res.status(statusCode).json({
-            success: true,
-            message,
-            data,
-        });
-    } catch (error) {
-        logger.error(`Error in successResponse: ${error.message}`);
-        return res.status(500).json({ success: false, message: 'Internal Server Error' });
+// Success response handler class
+class SuccessResponseHandler {
+    // Send formatted success response
+    send(res, message = 'Success', data = {}, statusCode = 200) {
+        try {
+            // Log success message
+            logger.info(`Sending success response: ${message}`);
+            // Send JSON success response
+            return res.status(statusCode).json({
+                success: true,
+                message,
+                data,
+            });
+        } catch (error) {
+            // Log and handle errors
+            logger.error(`Error in successResponse: ${error.message}`);
+            return res.status(500).json({ success: false, message: 'Internal Server Error' });
+        }
     }
-};
+}
 
-module.exports = successResponse;
+// Create singleton instance
+const successResponseHandler = new SuccessResponseHandler();
+
+// Export bound handler method
+module.exports = successResponseHandler.send.bind(successResponseHandler);
