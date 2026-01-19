@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../../../database/config/database');
 
-// Define User model
 const User = sequelize.define('User', {
     user_id: {
         type: DataTypes.INTEGER,
@@ -32,6 +31,10 @@ const User = sequelize.define('User', {
     password: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    last_login: {
+        type: DataTypes.DATE,
+        allowNull: true
     }
 }, {
     tableName: 'users',
