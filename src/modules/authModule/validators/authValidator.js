@@ -27,15 +27,31 @@ class AuthValidator {
                 'string.min': 'Password should have a minimum length of 6'
             })
         });
+
+        this.loginSchema = Joi.object({
+            identifier: Joi.string().required().messages({
+                'any.required': 'Email or username is required',
+                'string.empty': 'Email or username cannot be empty'
+            }),
+            password: Joi.string().required().messages({
+                'any.required': 'Password is required',
+                'string.empty': 'Password cannot be empty'
+            })
+        });
     }
 
     validateRegister(data) {
         return this.registerSchema.validate(data, { abortEarly: false });
+    }
+
+    validateLogin(data) {
+        return this.loginSchema.validate(data, { abortEarly: false });
     }
 }
 
 const authValidator = new AuthValidator();
 
 module.exports = {
-    validateRegister: authValidator.validateRegister.bind(authValidator)
+    validateRegister: authValidator.validateRegister.bind(authValidator),
+    validateLogin: authValidator.validateLogin.bind(authValidator)
 };
