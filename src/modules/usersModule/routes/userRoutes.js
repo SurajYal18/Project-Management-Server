@@ -7,4 +7,7 @@ const authorize = require('../middlewares/authorizationMiddleware');
 // Get all users (Admin only)
 router.get('/', authenticate, authorize(['admin']), userController.getUsers);
 
+// Get user by ID
+router.get('/:id', authenticate, userController.getUserById);
+
 module.exports = router;

@@ -12,6 +12,19 @@ class UserController {
             return errorResponse(res, 'Failed to fetch users', 500, error.message);
         }
     }
+
+    // Fetch user by ID
+    async getUserById(req, res) {
+        try {
+            const user = await userService.getUserById(req.params.id);
+            return successResponse(res, 'User fetched successfully', user, 200);
+        } catch (error) {
+            if (error.message === 'User not found') {
+                return errorResponse(res, error.message, 404);
+            }
+            return errorResponse(res, 'Failed to fetch user', 500, error.message);
+        }
+    }
 }
 
 module.exports = new UserController();
