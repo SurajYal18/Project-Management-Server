@@ -12,6 +12,19 @@ class UserService {
         }
         return user;
     }
+
+    async updateUser(userId, data, requestingUser) {
+        // Authorization check: User can update their own profile, Admin can update anyone
+        if (requestingUser.role !== 'admin' && requestingUser.id !== parseInt(userId)) {
+            throw new Error('Unauthorized');
+        }
+
+        const updatedUser = await userManager.updateUser(userId, data);
+        if (!updatedUser) {
+            throw new Error('User not found');
+        }
+        return updatedUser;
+    }
 }
 
 module.exports = new UserService();

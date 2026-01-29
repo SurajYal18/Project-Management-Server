@@ -10,4 +10,7 @@ router.get('/', authenticate, authorize(['admin']), userController.getUsers);
 // Get user by ID
 router.get('/:id', authenticate, userController.getUserById);
 
+// Update user profile
+router.put('/:id', authenticate, userController.updateUser);
+
 module.exports = router;
