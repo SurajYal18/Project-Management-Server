@@ -8,6 +8,15 @@ const validateUpdateUser = (data) => {
     return schema.validate(data);
 };
 
+const validateChangePassword = (data) => {
+    const schema = Joi.object({
+        old_password: Joi.string().required(),
+        new_password: Joi.string().min(6).required()
+    });
+    return schema.validate(data);
+};
+
 module.exports = {
-    validateUpdateUser
+    validateUpdateUser,
+    validateChangePassword
 };

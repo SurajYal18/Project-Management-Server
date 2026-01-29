@@ -1,7 +1,7 @@
 const userService = require('../services/userService');
 const successResponse = require('../../../utils/successResponse');
 const errorResponse = require('../../../utils/errorResponse');
-const { validateUpdateUser } = require('../validators/userValidator');
+const { validateUpdateUser, validateChangePassword } = require('../validators/userValidator');
 
 class UserController {
     // Fetch all users
@@ -59,6 +59,32 @@ class UserController {
                 return errorResponse(res, error.message, 404);
             }
             return errorResponse(res, 'Failed to delete user', 500, error.message);
+        }
+    }
+
+    // Change password
+    async changePassword(req, res) {
+        try {
+            const { error, value } = validateChangePassword(req.body);
+            if (error) {
+                return errorResponse(res, error.details[0].message, 400);
+            }
+
+            const { old_password, new_password } = value;
+            await userService.changePassword(req.params.id, old_password, new_password, req.user);
+            return successResponse(res, 'Password changed successfully', null, 200);
+
+        } catch (error) {
+            if (error.message === 'Unauthorized') {
+                return errorResponse(res, 'You are not authorized to change this password', 403);
+            }
+            if (error.message === 'User not found') {
+                return errorResponse(res, error.message, 404);
+            }
+            if (error.message === 'Invalid old password') {
+                return errorResponse(res, error.message, 400);
+            }
+            return errorResponse(res, 'Failed to change password', 500, error.message);
         }
     }
 }

@@ -1,4 +1,5 @@
 const userManager = require('../managers/userManager');
+const { hashPassword, comparePassword } = require('../../../helpers/passwordHelper');
 
 class UserService {
     async getAllUsers() {
@@ -32,6 +33,27 @@ class UserService {
             throw new Error('User not found');
         }
         return deleted;
+    }
+
+    async changePassword(userId, oldPassword, newPassword, requestingUser) {
+        if (requestingUser.id !== parseInt(userId)) {
+             throw new Error('Unauthorized');
+        }
+
+        const user = await userManager.findUserWithPassword(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        const isMatch = await comparePassword(oldPassword, user.password);
+        if (!isMatch) {
+            throw new Error('Invalid old password');
+        }
+
+        const hashedPassword = await hashPassword(newPassword);
+        await userManager.updateUser(userId, { password: hashedPassword });
+        
+        return { message: 'Password updated successfully' };
     }
 }
 

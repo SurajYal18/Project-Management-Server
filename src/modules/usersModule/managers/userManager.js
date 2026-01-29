@@ -13,6 +13,10 @@ class UserManager {
         });
     }
 
+    async findUserWithPassword(userId) {
+        return await User.findByPk(userId);
+    }
+
     async updateUser(userId, data) {
         const user = await User.findByPk(userId);
         if (!user) return null;
