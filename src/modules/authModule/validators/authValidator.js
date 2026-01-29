@@ -25,6 +25,9 @@ class AuthValidator {
             password: Joi.string().min(6).required().messages({
                 'any.required': 'Password is required',
                 'string.min': 'Password should have a minimum length of 6'
+            }),
+            role: Joi.string().valid('user', 'admin', 'manager').optional().messages({
+                'any.only': 'Role must be one of [user, admin, manager]'
             })
         });
 

@@ -5,7 +5,7 @@ const logger = require('../../../utils/logger');
 
 class AuthService {
     async registerUser(userData) {
-        const { name, user_name, email_id, phone_no, password } = userData;
+        const { name, user_name, email_id, phone_no, password, role } = userData;
 
         // Check for duplicate email or username
         const existingUserByEmail = await authManager.findUserByEmail(email_id);
@@ -17,7 +17,7 @@ class AuthService {
         // Hash password and create user
         const hashedPassword = await hashPassword(password);
         const newUser = await authManager.createUser({
-            name, user_name, email_id, phone_no,
+            name, user_name, email_id, phone_no, role,
             password: hashedPassword
         });
 
@@ -26,8 +26,8 @@ class AuthService {
         delete userJson.password;
 
         // Generate JWT tokens
-        const accessToken = generateToken({ id: newUser.user_id, username: newUser.user_name });
-        const refreshToken = generateRefreshToken({ id: newUser.user_id, username: newUser.user_name });
+        const accessToken = generateToken({ id: newUser.user_id, username: newUser.user_name, role: newUser.role });
+        const refreshToken = generateRefreshToken({ id: newUser.user_id, username: newUser.user_name, role: newUser.role });
 
         // Store refresh token in database
         await authManager.storeRefreshToken(newUser.user_id, refreshToken);
@@ -55,8 +55,8 @@ class AuthService {
         delete userJson.password;
 
         // Generate JWT tokens
-        const accessToken = generateToken({ id: user.user_id, username: user.user_name });
-        const refreshToken = generateRefreshToken({ id: user.user_id, username: user.user_name });
+        const accessToken = generateToken({ id: user.user_id, username: user.user_name, role: user.role });
+        const refreshToken = generateRefreshToken({ id: user.user_id, username: user.user_name, role: user.role });
 
         // Store refresh token in database
         await authManager.storeRefreshToken(user.user_id, refreshToken);
