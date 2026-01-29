@@ -19,6 +19,13 @@ class UserManager {
         await user.update(data);
         return await this.findUserById(userId);
     }
+
+    async deleteUser(userId) {
+        const user = await User.findByPk(userId);
+        if (!user) return null;
+        await user.destroy();
+        return true;
+    }
 }
 
 module.exports = new UserManager();

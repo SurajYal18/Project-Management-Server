@@ -25,6 +25,14 @@ class UserService {
         }
         return updatedUser;
     }
+
+    async deleteUser(userId) {
+        const deleted = await userManager.deleteUser(userId);
+        if (!deleted) {
+            throw new Error('User not found');
+        }
+        return deleted;
+    }
 }
 
 module.exports = new UserService();

@@ -48,6 +48,19 @@ class UserController {
             return errorResponse(res, 'Failed to update user', 500, error.message);
         }
     }
+
+    // Delete user
+    async deleteUser(req, res) {
+        try {
+            await userService.deleteUser(req.params.id);
+            return successResponse(res, 'User deleted successfully', null, 200);
+        } catch (error) {
+            if (error.message === 'User not found') {
+                return errorResponse(res, error.message, 404);
+            }
+            return errorResponse(res, 'Failed to delete user', 500, error.message);
+        }
+    }
 }
 
 module.exports = new UserController();
