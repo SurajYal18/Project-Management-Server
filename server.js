@@ -23,7 +23,7 @@ const startServer = async () => {
         const env = process.env.NODE_ENV || 'development';
 
         if (env === 'development') {
-            await sequelize.sync();
+            await sequelize.sync({ alter: true });
             logger.info('Database models synced (development mode)');
         } else {
             logger.info('Production mode - use migrations for schema changes');
