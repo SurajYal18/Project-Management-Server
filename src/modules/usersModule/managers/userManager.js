@@ -30,6 +30,20 @@ class UserManager {
         await user.destroy();
         return true;
     }
+
+    async searchUsers(query) {
+        const { Op } = require('sequelize');
+        return await User.findAll({
+            where: {
+                [Op.or]: [
+                    { name: { [Op.like]: `%${query}%` } },
+                    { email_id: { [Op.like]: `%${query}%` } },
+                    { user_name: { [Op.like]: `%${query}%` } }
+                ]
+            },
+            attributes: { exclude: ['password', 'refresh_token'] }
+        });
+    }
 }
 
 module.exports = new UserManager();

@@ -55,6 +55,10 @@ class UserService {
         
         return { message: 'Password updated successfully' };
     }
+
+    async searchUsers(query) {
+        return await userManager.searchUsers(query);
+    }
 }
 
 module.exports = new UserService();

@@ -1,7 +1,7 @@
 const userService = require('../services/userService');
 const successResponse = require('../../../utils/successResponse');
 const errorResponse = require('../../../utils/errorResponse');
-const { validateUpdateUser, validateChangePassword } = require('../validators/userValidator');
+const { validateUpdateUser, validateChangePassword, validateSearchUsers } = require('../validators/userValidator');
 
 class UserController {
     // Fetch all users
@@ -87,6 +87,20 @@ class UserController {
             return errorResponse(res, 'Failed to change password', 500, error.message);
         }
     }
-}
+    // Search users by name, email, or username
+    async searchUsers(req, res) {
+        try {
+            // Validate query parameter
+            const { error, value } = validateSearchUsers(req.query);
+            if (error) {
+                return errorResponse(res, error.details[0].message, 400);
+            }
+
+            const users = await userService.searchUsers(value.q);
+            return successResponse(res, 'Users search completed successfully', users, 200);
+        } catch (error) {
+            return errorResponse(res, 'Failed to search users', 500, error.message);
+        }
+    }}
 
 module.exports = new UserController();

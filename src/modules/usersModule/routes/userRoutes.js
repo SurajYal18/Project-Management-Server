@@ -4,6 +4,9 @@ const userController = require('../controllers/userController');
 const { authenticate } = require('../../authModule/middlewares/authMiddleware');
 const authorize = require('../middlewares/authorizationMiddleware');
 
+// Search users by name, email, or username
+router.get('/search', authenticate, userController.searchUsers);
+
 // Get all users (Admin only)
 router.get('/', authenticate, authorize(['admin']), userController.getUsers);
 

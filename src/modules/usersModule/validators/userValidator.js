@@ -16,7 +16,18 @@ const validateChangePassword = (data) => {
     return schema.validate(data);
 };
 
+const validateSearchUsers = (data) => {
+    const schema = Joi.object({
+        q: Joi.string().min(1).max(100).required().messages({
+            'string.empty': 'Search query cannot be empty',
+            'any.required': 'Search query is required'
+        })
+    });
+    return schema.validate(data);
+};
+
 module.exports = {
     validateUpdateUser,
-    validateChangePassword
+    validateChangePassword,
+    validateSearchUsers
 };
